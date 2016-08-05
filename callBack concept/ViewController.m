@@ -10,13 +10,25 @@
 
 @interface ViewController ()
 
+@property (nonatomic) NSMutableArray *handlers;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    self.handlers = [NSMutableArray  new];
+    [self.handlers addObject:^(){
+        NSLog(@"methodDD");
+        NSLog(@"methodEE");
+    }];
+    [self.handlers addObject:^(){
+        NSLog(@"methodFF");
+    }];
+    
+    [self methodDefault];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -24,4 +36,43 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void) methodDefault {
+    [self methodA];
+}
+
+- (void) methodA {
+    NSLog(@"methodA");
+    if(self.handlers.count != 0){
+        for (int i = 0; i < self.handlers.count ;i++) {
+            void(^handle)() = [self.handlers objectAtIndex:i];
+            handle();
+        }
+        
+    }
+    [self methodB];
+}
+
+- (void) methodB {
+    NSLog(@"methodB");
+    [self methodC];
+}
+
+- (void) methodC {
+    NSLog(@"methodC");
+}
+
+
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
